@@ -1,4 +1,4 @@
-import { addPost } from "../api.js";
+
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   const render = () => {
@@ -27,7 +27,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
           </div>
           <label>
             Опишите фотографию: 
-            <textarea class="input textarea" rows="4"></textarea
+            <textarea class="input textarea" rows="4"></textarea>
           </label>
           <button class="button" id="add-button">Добавить</button>
         </div>
@@ -39,7 +39,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     document.getElementById("add-button").addEventListener("click", () => {
       onAddPostClick({
         description: "Описание картинки",
-        imageUrl: "https://image.png",
+        imageUrl: "https://proprikol.ru/wp-content/uploads/2020/08/krasivye-kartinki-kotikov-48.jpg",
       });
     });
   };

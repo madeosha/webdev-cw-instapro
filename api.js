@@ -72,7 +72,7 @@ export function uploadImage({ file }) {
 }
 
 // Добавляем пост на сервер
-export function addPost({ description, imageUrl }) {
+export function addPost({ description, imageUrl, token }) {
   console.log(description, imageUrl)
   return fetch(postsHost, {
     method: "POST",
@@ -83,7 +83,7 @@ export function addPost({ description, imageUrl }) {
       }
     ),
     headers: {
-      Authorization: getToken(),
+      Authorization: token,
     },
   })
 }
