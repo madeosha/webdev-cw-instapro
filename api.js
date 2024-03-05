@@ -73,7 +73,6 @@ export function uploadImage({ file }) {
 
 // Добавляем пост на сервер
 export function addPost({ description, imageUrl, token }) {
-  console.log(description, imageUrl)
   return fetch(postsHost, {
     method: "POST",
     body: JSON.stringify(

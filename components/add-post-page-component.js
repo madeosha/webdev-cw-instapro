@@ -1,7 +1,8 @@
-
+import { renderUploadImageComponent } from "./upload-image-component.js";
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   const render = () => {
+    let imageUrl = "";
     // TODO: Реализовать страницу добавления поста
     const appHtml = `
     <div class="page-container">
@@ -36,10 +37,25 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
 
     appEl.innerHTML = appHtml;
 
+    const uploadImageContainer = appEl.querySelector(".upload-image-container");
+
+    if (uploadImageContainer) {
+      renderUploadImageComponent({
+        element: appEl.querySelector(".upload-image-container"),
+        onImageUrlChange(newImageUrl) {
+          imageUrl = newImageUrl;
+        },
+      });
+    }
+
+    document.querySelector(".textarea").addEventListener("input", (event) => {
+      console.log(event.target.value)
+    });
+
     document.getElementById("add-button").addEventListener("click", () => {
       onAddPostClick({
-        description: "Описание картинки",
-        imageUrl: "https://proprikol.ru/wp-content/uploads/2020/08/krasivye-kartinki-kotikov-48.jpg",
+        description: document.querySelector(".textarea").value,
+        imageUrl: imageUrl,
       });
     });
   };
