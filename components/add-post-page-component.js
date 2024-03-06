@@ -1,9 +1,12 @@
+import { addPost } from "../api.js";
+import { goToPage } from "../index.js";
+import { POSTS_PAGE } from "../routes.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   const render = () => {
     let imageUrl = "";
-    // TODO: Реализовать страницу добавления поста (ВЫПОЛНЕНО)
+    //Страница добавления поста
     const appHtml = `
     <div class="page-container">
       <div class="header-container">
@@ -28,7 +31,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
           </div>
           <label>
             Опишите фотографию: 
-            <textarea class="input textarea" rows="4"></textarea>
+            <textarea id="textarea" class="input textarea" rows="4"></textarea>
           </label>
           <button class="button" id="add-button">Добавить</button>
         </div>
@@ -52,10 +55,26 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     });
 
     document.getElementById("add-button").addEventListener("click", () => {
-      onAddPostClick({
-        description: document.querySelector(".textarea").value,
+      const description = document.getElementById("textarea").value;
+
+      if (!imageUrl) {
+        alert("Не выбрана фотография");
+        return;
+      }
+
+      if (!description) {
+        alert("Нужно добавить описание")
+        return;
+      }
+      
+      console.log(description, imageUrl)
+
+      addPost({
+        description: description.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
         imageUrl: imageUrl,
-      });
+      })
+
+      goToPage(POSTS_PAGE);
     });
   };
 
