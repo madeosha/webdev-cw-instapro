@@ -49,7 +49,6 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     }
 
     document.querySelector(".textarea").addEventListener("input", (event) => {
-      console.log(event.target.value)
     });
 
     document.getElementById("add-button").addEventListener("click", () => {
