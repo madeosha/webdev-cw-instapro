@@ -1,6 +1,6 @@
 import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage } from "../index.js";
+import { posts, goToPage, getToken } from "../index.js";
 import { like, disLike } from "../api.js";
 
 export function renderPostsPageComponent({ appEl }) {
@@ -32,7 +32,7 @@ export function renderPostsPageComponent({ appEl }) {
 
     return `
     <li class="post">
-    <div class="post-header" data-user-id="642d00329b190443860c2f31">
+    <div class="post-header" data-user-id="${post.user.id}">
         <img src="${post.user.imageUrl}" class="post-header__user-image">
         <p class="post-header__user-name">${post.user.name}</p>
     </div>
@@ -93,7 +93,7 @@ export function renderPostsPageComponent({ appEl }) {
         
         posts[index].likes.length += 1;
         posts[index].isLiked = !posts[index].isLiked;
-        like({ posts, getToken, index }).then((data) => {
+        like({ token: getToken(), id:posts[index].id }).then((data) => {
           posts[index].likes = data.post.likes;
           return renderPostsPageComponent({ appEl })
         })
@@ -101,7 +101,7 @@ export function renderPostsPageComponent({ appEl }) {
       } else {
         posts[index].likes.length += -1;
         posts[index].isLiked = !posts[index].isLiked;
-        disLike({ posts, getToken, index }).then((data) => {
+        disLike({ token: getToken(), id:posts[index].id }).then((data) => {
           posts[index].likes = data.post.likes;
           return renderPostsPageComponent({ appEl })
         })

@@ -107,17 +107,12 @@ export function addPost({ description, imageUrl, token }) {
 }
 
 //Записываем лайк на сервер и получаем данные
-export function like({ posts, index }) {
-  return fetch(postsHost + `/${posts[index].id}/like`, {
+export function like({ id, token }) {
+  return fetch(postsHost + `/${id}/like`, {
     method: "POST",
-    body: JSON.stringify(
-      {
-        likes: {id: posts[index].user.id, name: posts[index].user.name,},
-        isLiked: posts.isLiked,        
-      }
-    ),
+    
     headers: {
-      Authorization: getToken(),
+      Authorization: token,
     },
   })
   .then((response) => {
@@ -126,17 +121,12 @@ export function like({ posts, index }) {
 }
 
 //Записываем снятие лайка и получаем данные
-export function disLike({ posts, index }) {
-  return fetch(postsHost + `/${posts[index].id}/dislike`, {
+export function disLike({ id, token }) {
+  return fetch(postsHost + `/${id}/dislike`, {
     method: "POST",
-    body: JSON.stringify(
-      {
-        likes: {id: posts[index].user.id, name: posts[index].user.name,},
-        isLiked: posts.isLiked,        
-      }
-    ),
+    
     headers: {
-      Authorization: getToken(),
+      Authorization: token,
     },
   })
   .then((response) => {

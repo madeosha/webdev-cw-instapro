@@ -69,12 +69,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
       
       console.log(description, imageUrl)
 
-      addPost({
-        description: description.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
-        imageUrl: imageUrl,
-      })
-
-      goToPage(POSTS_PAGE);
+      onAddPostClick({ description, imageUrl});
     });
   };
 
