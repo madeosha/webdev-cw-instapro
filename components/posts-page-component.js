@@ -1,12 +1,35 @@
 import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage } from "../index.js";
+import { like, disLike } from "../api.js";
 
 export function renderPostsPageComponent({ appEl }) {
-  // TODO: реализовать рендер постов из api (ВЫПОЛНЕНО)
+  //Рендер постов из api
    
   console.log("Актуальный список постов:", posts);
-  const postsHtml = posts.map(post => {
+
+  const postsHtml = posts.map((post, index) => {
+
+    //Начала делать лайки
+    const likesCounter = post.likes.length;
+    let firstLiker = null;
+    const moreLikers = String(" еще " + (post.likes.length - 1));
+
+    const likersRenderApp = () => {
+      if (likesCounter === 0) {
+          return "";
+      } 
+      
+      if (likesCounter === 1) {
+          firstLiker = post.likes[0].name;
+          return `Нравится: <span><strong>${firstLiker}</strong></span>`;
+      } else if (likesCounter > 1) {
+          firstLiker = post.likes[0].name;
+          return `Нравится: <span><strong>${firstLiker}</strong></span> и <span></span><span><strong>${moreLikers}</strong></span>`;
+      }
+
+    };
+
     return `
     <li class="post">
     <div class="post-header" data-user-id="642d00329b190443860c2f31">
@@ -17,11 +40,12 @@ export function renderPostsPageComponent({ appEl }) {
       <img class="post-image" src="${post.imageUrl}">
     </div>
     <div class="post-likes">
-      <button data-post-id="642d00579b190443860c2f32" class="like-button">
-        <img src="${post.isLiked ? './assets/images/like-active.svg' : './assets/images/like-not-active.svg'}">
+      <button data-post-id="${index}" class="like-button">
+        <img style="${post.isLiked === false ? "display: block" : "display: none"}" src="./assets/images/like-not-active.svg">
+        <img style="${post.isLiked === true ? "display: block" : "display: none"}" src="./assets/images/like-active.svg">
       </button>
       <p class="post-likes-text">
-        Нравится: <strong>${post.likes.length}</strong>
+      ${likersRenderApp("")}</strong>
       </p>
     </div>
     <p class="post-text">
@@ -52,6 +76,40 @@ export function renderPostsPageComponent({ appEl }) {
     element: document.querySelector(".header-container"),
   });
 
+  const likeButtons = document.querySelectorAll(".like-button");
+
+  for (let likeButton of likeButtons) {
+    likeButton.addEventListener("click", () => {
+
+      if (getToken() === undefined) {
+        return likeButton.disabled = true;
+      } else {
+        likeButton.disabled = false;
+      }
+      
+      const index = likeButton.dataset.postId;   
+
+      if (posts[index].isLiked === false) {
+        
+        posts[index].likes.length += 1;
+        posts[index].isLiked = !posts[index].isLiked;
+        like({ posts, getToken, index }).then((data) => {
+          posts[index].likes = data.post.likes;
+          return renderPostsPageComponent({ appEl })
+        })
+
+      } else {
+        posts[index].likes.length += -1;
+        posts[index].isLiked = !posts[index].isLiked;
+        disLike({ posts, getToken, index }).then((data) => {
+          posts[index].likes = data.post.likes;
+          return renderPostsPageComponent({ appEl })
+        })
+      }
+       
+    });
+  }
+
   for (let userEl of document.querySelectorAll(".post-header")) {
     userEl.addEventListener("click", () => {
       goToPage(USER_POSTS_PAGE, {
@@ -60,3 +118,4 @@ export function renderPostsPageComponent({ appEl }) {
     });
   }
 }
+

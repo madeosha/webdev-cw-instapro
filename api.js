@@ -24,6 +24,7 @@ export function getPosts({ token }) {
 
 //Получение списка постов с сервера
 export function getUserPosts({ data, token }) {
+
   return fetch(postsHost + `/user-posts/${data.userId}`, {
     method: "GET",
     headers: {
@@ -31,9 +32,11 @@ export function getUserPosts({ data, token }) {
     },
   })
   .then((response) => {
+    console.log(response);
     return response.json();
   })
   .then((data) => {
+    console.log(data);
     return data.posts;
   });
 }
@@ -104,4 +107,39 @@ export function addPost({ description, imageUrl, token }) {
 }
 
 //Записываем лайк на сервер и получаем данные
+export function like({ posts, index }) {
+  return fetch(postsHost + `/${posts[index].id}/like`, {
+    method: "POST",
+    body: JSON.stringify(
+      {
+        likes: {id: posts[index].user.id, name: posts[index].user.name,},
+        isLiked: posts.isLiked,        
+      }
+    ),
+    headers: {
+      Authorization: getToken(),
+    },
+  })
+  .then((response) => {
+    return response.json();
+  })
+}
+
 //Записываем снятие лайка и получаем данные
+export function disLike({ posts, index }) {
+  return fetch(postsHost + `/${posts[index].id}/dislike`, {
+    method: "POST",
+    body: JSON.stringify(
+      {
+        likes: {id: posts[index].user.id, name: posts[index].user.name,},
+        isLiked: posts.isLiked,        
+      }
+    ),
+    headers: {
+      Authorization: getToken(),
+    },
+  })
+  .then((response) => {
+    return response.json();
+  })
+}
