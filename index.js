@@ -27,7 +27,6 @@ export const setPosts = (newPosts) => {
 
 export const getToken = () => {
   const token = user ? `Bearer ${user.token}` : undefined;
-  console.log(token);
   return token;
 };
 
@@ -75,7 +74,6 @@ export const goToPage = (newPage, data) => {
     if (newPage === USER_POSTS_PAGE) {
       page = LOADING_PAGE;
       renderApp();
-      console.log(data)
       return getUserPosts({ token: getToken(), data })
       .then((newPosts) => {
         page = USER_POSTS_PAGE;
@@ -126,7 +124,6 @@ const renderApp = () => {
       onAddPostClick({ description, imageUrl }) {
         // TODO: реализовать добавление поста в API
         addPost({ token:getToken(), description, imageUrl }).then(() => {
-          console.log("Добавляю пост...", { description, imageUrl });
           goToPage(POSTS_PAGE);
         });
       },

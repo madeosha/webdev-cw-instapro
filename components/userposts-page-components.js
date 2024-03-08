@@ -1,9 +1,13 @@
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, getToken } from "../index.js";
+import { formatDistanceToNow } from "date-fns";
+import { ru } from "date-fns/locale";
 
 export function renderUserPostsPageComponent({ appEl }) {
     
     const appHtml = posts.map((post, index) => {
+
+        const createdTimeToNow = formatDistanceToNow(new Date(post.createdAt), {locale: ru});
 
         return `
             <ul class="posts">     
@@ -22,7 +26,7 @@ export function renderUserPostsPageComponent({ appEl }) {
                         <span class="user-name">${post.user.name}</span>
                         ${post.description}
                     </p>
-                    <p class="post-date"></p>
+                    <p class="post-date">${createdTimeToNow}</p>
                 </li>
                 <br>
             </ul>`;
